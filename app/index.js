@@ -7,6 +7,10 @@ app.get('/', (request, response) => {
   response.send('Hello from Express!')
 })
 
+app.get('/timings', function(req, res){
+	res.send(req);
+})
+
 app.listen(port, (err) => {  
   if (err) {
     return console.log('something bad happened', err)
