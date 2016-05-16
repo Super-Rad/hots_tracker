@@ -6,7 +6,6 @@ const port = 3000
 
 app.get('/', (request, response) => {  
 	test_counter.increment();
-	
   response.send('Hello from Express!')
 })
 
