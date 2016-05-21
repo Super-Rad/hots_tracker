@@ -5,8 +5,14 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const port = 3000
 
-app.get('/', (request, response) => {  
-  response.sendFile(__dirname + '/index.html');
+var pug = require('pug')
+
+app.get('/:idtoken', (request, response) => {  
+  var idtoken = request.params.idtoken;
+  var fn = pug.compileFile('app/index.pug');
+  response.send(fn({title: "OVERCAST", roomId: idtoken}));
+  //response.
+  //response.sendFile(__dirname + '/index.html');
 })
 
 app.get('/timings', function(req, res){
@@ -18,6 +24,10 @@ var clickedcount = 0;
 
 io.on('connection', function(socket) {
 	socket.emit('news', {hello: 'world'});
+	socket.on('room', function(room)
+	{
+		socket.join(room);
+	});
 	socket.on('my other event', function(data){
 		console.log(data);
 		if (data.button === 'clicked'){
