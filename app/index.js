@@ -11,35 +11,43 @@ app.get('/:idtoken', (request, response) => {
   var idtoken = request.params.idtoken;
   var fn = pug.compileFile('app/index.pug');
   response.send(fn({title: "OVERCAST", roomId: idtoken}));
-  //response.
-  //response.sendFile(__dirname + '/index.html');
 })
 
 app.get('/timings', function(req, res){
 	res.send(req);
 })
 
-
+var rooms = {}
 var clickedcount = 0;
 
 io.on('connection', function(socket) {
-	socket.emit('news', {hello: 'world'});
-	socket.on('room', function(room)
-	{
-		socket.join(room);
-	});
-	socket.on('my other event', function(data){
+ 	var room = socket.handshake['query']['room-id'];
+
+ 	console.log(room);
+ 	if (!rooms[room])
+ 	{
+ 		console.log("Creating Room: " + room);
+ 		rooms[room] = {clickedCount : 0};
+ 	}
+	socket.join(room);
+
+	console.log("Sending current click count of :" + rooms[room].clickedCount);
+	socket.emit('news', {clicked: rooms[room].clickedCount});
+
+
+	socket.on('clickEvent', function(data){
 		console.log(data);
 		if (data.button === 'clicked'){
-			clickedcount += 1;
-			sendUpdate();
+			rooms[room].clickedCount += 1;
+			console.log("Sending new click count of " + rooms[room].clickedCount);
+			sendUpdate(room);
 		}
 	});
 });
 
-function sendUpdate()
+function sendUpdate(room)
 {
-	io.sockets.emit('news', {clicked: clickedcount});
+	io.to(room).emit('news', {clicked: rooms[room].clickedCount});
 }
 
 

@@ -7,8 +7,7 @@ html
 			span(id="clickedCount") 0
 		script(src="https://cdn.socket.io/socket.io-1.4.5.js")
 		script.
-			var socket = io.connect(location.host);
-			socket.emit('room', '!{roomId}');
+			var socket = io.connect(location.host, {query: 'room-id=!{roomId}'} );
 			socket.on('news', function (data) {
 			console.log(data);
 			socket.emit('my other event', { my: 'data' });
@@ -20,6 +19,6 @@ html
 			});
 
 			function clickedButton(){
-			socket.emit('my other event', {button: 'clicked'});
+			socket.emit('clickEvent', {button: 'clicked'});
 			}
 
