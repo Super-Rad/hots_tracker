@@ -22,10 +22,15 @@ io.on('connection', function(socket) {
 		console.log(data);
 		if (data.button === 'clicked'){
 			clickedcount += 1;
-			socket.emit('news', {clicked: clickedcount});
+			sendUpdate();
 		}
 	});
 });
+
+function sendUpdate()
+{
+	io.sockets.emit('news', {clicked: clickedcount});
+}
 
 
 server.listen(port, (err) => {  
