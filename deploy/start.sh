@@ -1,3 +1,3 @@
 #!/bin/bash
-cd ~/hots_tracker
+cd /home/ubuntu/hots_tracker_deploy
 npm start
