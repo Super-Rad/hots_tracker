@@ -3,3 +3,7 @@ os: linux
 files:
   - source: /
     destination: /home/ubuntu/hots_tracker_deploy
+hooks:
+  ApplicationStart:
+    - location: deploy/start.sh
+      runas: root
